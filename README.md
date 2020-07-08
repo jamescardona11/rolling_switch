@@ -7,8 +7,9 @@ Full customable rolling switch widget for flutter apps based on Pedro Massango's
 Custom Switch button with attractive animation,
 made to allow you to customize colors, icons and other cosmetic content. Manage the widget states in the same way you do with the classical material's switch widget.
 
-> **NOTE**: Currently, you cannot directly change the widget width and height properties. This feature will be available soon.
-
+> **NOTE UPDATE**: 
+- Currently, you can directly change the widget width and height properties.
+- TextOn and TextOff are TextWidget.
 
 ## Previews
 
@@ -22,23 +23,16 @@ made to allow you to customize colors, icons and other cosmetic content. Manage 
 import 'package:lite_rolling_switch/lite_rolling_switch.dart';
 
 LiteRollingSwitch(
-    //initial value
-    value: true,
-    textOn: 'disponible',
-    textOff: 'ocupado',
-    colorOn: Colors.greenAccent[700],
-    colorOff: Colors.redAccent[700],
-    iconOn: Icons.done,
-    iconOff: Icons.remove_circle_outline,
-    textSize: 16.0,
+    initialState: true,
+    textOn: Text('active'),
+    textOff: Text('inactive'),
+    colorOn: Colors.deepOrange,
+    colorOff: Colors.blueGrey,
+    iconOn: Icons.lightbulb_outline,
+    iconOff: Icons.power_settings_new,
     onChanged: (bool state) {
-      //Use it to manage the different states
-      print('Current State of SWITCH IS: $state');
+        print('turned ${(state) ? 'on' : 'off'}');
     },
-),
+)
 
 ```
-
-## Other
-
-[](https://pub.dev/packages/lite_rolling_switch#-installing-tab-)
