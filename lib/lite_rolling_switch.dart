@@ -25,18 +25,18 @@ class LiteRollingSwitch extends StatefulWidget {
   final double width;
   final double height;
   final double innerSize;
-  final Text textOff;
-  final Text textOn;
+  final Text? textOff;
+  final Text? textOn;
   final Color colorOn;
   final Color colorOff;
   final Duration animationDuration;
   final IconData iconOn;
   final IconData iconOff;
-  final Color colorIconOn;
-  final Color colorIconOff;
-  final Function onTap;
-  final Function onDoubleTap;
-  final Function onSwipe;
+  final Color? colorIconOn;
+  final Color? colorIconOff;
+  final Function? onTap;
+  final Function? onDoubleTap;
+  final Function? onSwipe;
 
   const LiteRollingSwitch({
     this.initialState = false,
@@ -55,24 +55,24 @@ class LiteRollingSwitch extends StatefulWidget {
     this.onTap,
     this.onDoubleTap,
     this.onSwipe,
-    @required this.onChanged,
-  })  : assert(initialState != null && onChanged != null),
-        assert(height >= 50.0 && innerSize >= 40.0);
+    required this.onChanged,
+  }) : assert(height >= 50.0 && innerSize >= 40.0);
 
   @override
   _RollingSwitchState createState() => _RollingSwitchState();
 }
 
-class _RollingSwitchState extends State<LiteRollingSwitch> with SingleTickerProviderStateMixin {
+class _RollingSwitchState extends State<LiteRollingSwitch>
+    with SingleTickerProviderStateMixin {
   final double _margin = 10.0;
   double maxWidthRotation = 0.0;
   double value = 0.0;
 
-  AnimationController animationController;
-  Animation<double> animation;
-  Animation<double> animationOpacityOff;
-  Animation<double> animationOpacityOn;
-  Animation<Color> animationColor;
+  late AnimationController animationController;
+  late Animation<double> animation;
+  late Animation<double> animationOpacityOff;
+  late Animation<double> animationOpacityOn;
+  late Animation<Color?> animationColor; //todo
 
   bool turnState = true;
 
@@ -98,15 +98,15 @@ class _RollingSwitchState extends State<LiteRollingSwitch> with SingleTickerProv
     return GestureDetector(
       onDoubleTap: () {
         _action();
-        if (widget.onDoubleTap != null) widget.onDoubleTap();
+        if (widget.onDoubleTap != null) widget.onDoubleTap!.call();
       },
       onTap: () {
         _action();
-        if (widget.onTap != null) widget.onTap();
+        if (widget.onTap != null) widget.onTap!.call();
       },
       onPanEnd: (details) {
         _action();
-        if (widget.onSwipe != null) widget.onSwipe();
+        if (widget.onSwipe != null) widget.onSwipe!.call();
         //widget.onSwipe();
       },
       child: AnimatedBuilder(
@@ -155,7 +155,8 @@ class _RollingSwitchState extends State<LiteRollingSwitch> with SingleTickerProv
                     child: child,
                   ),
                   child: Transform.rotate(
-                    angle: lerpDouble(0, 2 * math.pi, animationController.value),
+                    angle: lerpDouble(0, 2 * math.pi, animationController.value) ??
+                        0, // TODO
                     child: _CircularContainer(
                       size: widget.innerSize,
                       child: Stack(
@@ -164,14 +165,14 @@ class _RollingSwitchState extends State<LiteRollingSwitch> with SingleTickerProv
                             animationOpacity: animationOpacityOff,
                             iconData: widget.iconOff,
                             size: widget.innerSize / 2,
-                            colorValue: animationColor.value,
+                            colorValue: animationColor.value!,
                             iconColor: widget.colorIconOff,
                           ),
                           _IconWidget(
                             animationOpacity: animationOpacityOn,
                             iconData: widget.iconOn,
                             size: widget.innerSize / 2,
-                            colorValue: animationColor.value,
+                            colorValue: animationColor.value!,
                             iconColor: widget.colorIconOn,
                           ),
                         ],
@@ -227,10 +228,10 @@ class _RollingSwitchState extends State<LiteRollingSwitch> with SingleTickerProv
 
 class _TextRight extends StatelessWidget {
   final double margin;
-  final double size;
-  final Text text;
+  final double? size;
+  final Text? text;
 
-  const _TextRight({Key key, this.margin, this.size, this.text}) : super(key: key);
+  const _TextRight({Key? key, this.margin = 0, this.size, this.text}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -245,10 +246,10 @@ class _TextRight extends StatelessWidget {
 
 class _TextLeft extends StatelessWidget {
   final double margin;
-  final double size;
-  final Text text;
+  final double? size;
+  final Text? text;
 
-  const _TextLeft({Key key, this.margin, this.size, this.text}) : super(key: key);
+  const _TextLeft({Key? key, this.margin = 0, this.size, this.text}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -262,11 +263,11 @@ class _TextLeft extends StatelessWidget {
 }
 
 class _CircularContainer extends StatelessWidget {
-  final double size;
-  final Widget child;
+  final double? size;
+  final Widget? child;
 
   const _CircularContainer({
-    Key key,
+    Key? key,
     this.size,
     this.child,
   }) : super(key: key);
@@ -288,17 +289,17 @@ class _CircularContainer extends StatelessWidget {
 
 class _IconWidget extends StatelessWidget {
   final IconData iconData;
-  final Color iconColor;
+  final Color? iconColor;
   final double size;
   final Animation<double> animationOpacity;
   final Color colorValue;
 
   const _IconWidget({
-    Key key,
-    @required this.animationOpacity,
-    @required this.iconData,
-    @required this.size,
-    @required this.colorValue,
+    Key? key,
+    required this.animationOpacity,
+    required this.iconData,
+    required this.size,
+    required this.colorValue,
     this.iconColor,
   }) : super(key: key);
 
