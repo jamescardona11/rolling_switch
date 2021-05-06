@@ -1,5 +1,3 @@
-library lite_rolling_switch;
-
 import 'dart:math' as math;
 import 'dart:ui';
 import 'package:flutter/material.dart';
