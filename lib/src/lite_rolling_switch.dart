@@ -18,9 +18,7 @@ import 'package:flutter/material.dart';
 /// states or any other undesirable behavior, please
 /// don't forget to set them.
 class LiteRollingSwitch extends StatefulWidget {
-  @required
   final bool initialState;
-  @required
   final Function(bool) onChanged;
   final double width;
   final double height;

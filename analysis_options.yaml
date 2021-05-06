@@ -4,8 +4,6 @@ include: package:lint/analysis_options_package.yaml
 analyzer:
   exclude:
     - example/**
-    - example/adaptative_theme_example/**
-    - example/argo_example/**
 
   errors:
     sort_unnamed_constructors_first: ignore
