@@ -53,7 +53,15 @@ class _MyHomePageState extends State<MyHomePage> {
                   print('turned ${(state) ? 'on' : 'off'}');
                 },
               ),
-            )
+            ),
+
+            RollingSwitch.icon(
+              rollingInfoOn: RollingIconInfo(),
+              rollingInfoOff: RollingIconInfo(),
+              onChanged: (bool state) {
+                print('turned ${(state) ? 'on' : 'off'}');
+              },
+            ),
           ],
         ),
       ),
