@@ -66,15 +66,22 @@ class _RollingSwitchState extends State<RollingSwitch>
   late Animation<Color?> animationColor;
 
   final double margin = 10.0;
-  double maxWidthRotation = 0.0;
   double value = 0.0;
 
+  late double maxSlide;
+  late double minDragStartEdge;
+  late double maxDragStartEdge;
+
   bool turnState = true;
+  bool canBeDragged = false;
 
   @override
   void initState() {
     super.initState();
-    maxWidthRotation = widget.width - widget.innerSize - margin;
+
+    maxSlide = widget.width - widget.innerSize - margin;
+    minDragStartEdge = widget.width * 0.2;
+    maxDragStartEdge = maxSlide - 16;
 
     animationController = AnimationController(
       vsync: this,
@@ -82,51 +89,90 @@ class _RollingSwitchState extends State<RollingSwitch>
     );
 
     initAllAnimation();
+
+    turnState = widget.initialState;
+    if (turnState) {
+      animationController.value = 1;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: animationController,
-      builder: (context, child) => Container(
-        padding: const EdgeInsets.all(5),
-        width: widget.width,
-        height: widget.height,
-        decoration: BoxDecoration(
-          color: animationColor.value,
-          borderRadius: BorderRadius.circular(50),
-        ),
-        child: Center(
-          child: Stack(
-            children: [
-              CircularContainer(
-                size: widget.innerSize,
-                child: Stack(
-                  children: <Widget>[
-                    IconWidget(
-                      animationOpacity: animationOpacityOff,
-                      iconData: (widget.rollingInfoOff as RollingIconInfo).icon,
-                      size: widget.innerSize / 2,
-                      colorValue: animationColor.value!,
-                      iconColor:
-                          (widget.rollingInfoOff as RollingIconInfo).colorIconActive,
-                    ),
-                    IconWidget(
-                      animationOpacity: animationOpacityOn,
-                      iconData: (widget.rollingInfoOn as RollingIconInfo).icon,
-                      size: widget.innerSize / 2,
-                      colorValue: animationColor.value!,
-                      iconColor:
-                          (widget.rollingInfoOn as RollingIconInfo).colorIconActive,
-                    ),
-                  ],
-                ),
-              )
-            ],
+    return Container(
+      padding: const EdgeInsets.all(5),
+      width: widget.width,
+      height: widget.height,
+      decoration: BoxDecoration(
+        color: animationColor.value,
+        borderRadius: BorderRadius.circular(50),
+      ),
+      child: GestureDetector(
+        onHorizontalDragStart: onDragStart,
+        onHorizontalDragUpdate: onDragUpdate,
+        onHorizontalDragEnd: onDragEnd,
+        child: AnimatedBuilder(
+          animation: animationController,
+          builder: (_, child) {
+            final double animValue = animationController.value;
+            final slideAmount = maxSlide * animValue;
+            return Transform.translate(
+              offset: Offset(slideAmount, 0),
+              // transform: Matrix4.identity()..translate(slideAmount),
+              // alignment: Alignment.centerLeft,
+              child: child,
+            );
+          },
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: CircularContainer(
+              size: widget.innerSize,
+              child: Icon(
+                Icons.check,
+                size: widget.innerSize / 2,
+              ),
+            ),
           ),
         ),
       ),
     );
+  }
+
+  void onDragStart(DragStartDetails details) {
+    final bool isDragOpenFromLeft =
+        animationController.isDismissed && details.localPosition.dx < minDragStartEdge;
+    final bool isDragCloseFromRight =
+        animationController.isCompleted && details.localPosition.dx > maxDragStartEdge;
+
+    canBeDragged = isDragCloseFromRight || isDragOpenFromLeft;
+  }
+
+  void onDragUpdate(DragUpdateDetails details) {
+    if (canBeDragged) {
+      print('CAN');
+      final double delta = (details.primaryDelta ?? 0) / maxSlide;
+      animationController.value += delta;
+    }
+  }
+
+  void onDragEnd(DragEndDetails details) {
+    if (animationController.isCompleted || animationController.isCompleted) {
+      return;
+    }
+    if (details.velocity.pixelsPerSecond.dx.abs() >= 365) {
+      final double visualVelocity =
+          details.velocity.pixelsPerSecond.dx / MediaQuery.of(context).size.width;
+      animationController.fling(velocity: visualVelocity);
+    } else if (animationController.value < 0.5) {
+      action();
+    } else {
+      action();
+    }
+  }
+
+  void action() {
+    turnState = !turnState;
+    turnState ? animationController.forward() : animationController.reverse();
+    widget.onChanged(turnState);
   }
 
   void initAllAnimation() {
