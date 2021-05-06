@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rolling_switch/rolling_switch.dart';
 
 void main() => runApp(MyApp());
 
