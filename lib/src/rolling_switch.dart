@@ -1,7 +1,11 @@
+import 'dart:math' as math;
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 import 'info/rolling_info.dart';
 import 'widget/circular_container.dart';
+import 'widget/text_indicator.dart';
 import 'widget/transform_rolling_info.dart';
 
 class RollingSwitch extends StatefulWidget {
@@ -67,7 +71,7 @@ class RollingSwitch extends StatefulWidget {
 class _RollingSwitchState extends State<RollingSwitch>
     with SingleTickerProviderStateMixin {
   late AnimationController animationController;
-  late Animation<double> animation;
+
   late Animation<double> animationOpacityLeft;
   late Animation<double> animationOpacityRight;
   late Animation<Color?> animationColor;
@@ -115,35 +119,60 @@ class _RollingSwitchState extends State<RollingSwitch>
           color: animationColor.value,
           borderRadius: BorderRadius.circular(50),
         ),
-        child: GestureDetector(
-          onHorizontalDragStart: onDragStart,
-          onHorizontalDragUpdate: onDragUpdate,
-          onHorizontalDragEnd: onDragEnd,
-          child: AnimatedBuilder(
-            animation: animationController,
-            builder: (_, child) {
-              final double animValue = animationController.value;
-              final slideAmount = maxSlide * animValue;
-              return Transform.translate(
-                offset: Offset(slideAmount, 0),
-                // transform: Matrix4.identity()..translate(slideAmount),
-                // alignment: Alignment.centerLeft,
-                child: child,
-              );
-            },
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: CircularContainer(
-                size: widget.innerSize,
-                child: TransforRollingWidget(
-                  animationOpacityLeft: animationOpacityLeft,
-                  animationOpacityRight: animationOpacityRight,
-                  innerSize: widget.innerSize,
-                  rollingInfoLeft: widget.rollingInfoLeft,
-                  rollingInfoRight: widget.rollingInfoRight,
+        child: Center(
+          child: Stack(
+            children: [
+              Transform.translate(
+                offset: Offset(margin * animationController.value, 0), //original
+                child: FadeTransition(
+                  opacity: animationOpacityRight,
+                  child: TextIndicatorWidget.right(
+                    margin: margin,
+                    text: widget.rollingInfoRight.text ?? const Text(''),
+                  ),
                 ),
               ),
-            ),
+              Padding(
+                padding: EdgeInsets.only(left: widget.innerSize),
+                child: Transform.translate(
+                  offset: Offset(margin * (1 - animationController.value), 0), //original
+                  child: FadeTransition(
+                    opacity: animationOpacityLeft,
+                    child: TextIndicatorWidget.left(
+                      margin: margin,
+                      text: widget.rollingInfoLeft.text ?? const Text(''),
+                    ),
+                  ),
+                ),
+              ),
+              GestureDetector(
+                onHorizontalDragStart: onDragStart,
+                onHorizontalDragUpdate: onDragUpdate,
+                onHorizontalDragEnd: onDragEnd,
+                child: AnimatedBuilder(
+                  animation: animationController,
+                  builder: (_, child) => Transform.translate(
+                    offset: Offset(maxSlide * animationController.value, 0),
+                    // transform: Matrix4.identity()..translate(slideAmount),
+                    // alignment: Alignment.centerLeft,
+                    child: child,
+                  ),
+                  child: Transform.rotate(
+                    angle: lerpDouble(0, 2 * math.pi, animationController.value)!,
+                    child: CircularContainer(
+                      size: widget.innerSize,
+                      child: TransforRollingWidget(
+                        animationOpacityLeft: animationOpacityLeft,
+                        animationOpacityRight: animationOpacityRight,
+                        innerSize: widget.innerSize,
+                        rollingInfoLeft: widget.rollingInfoLeft,
+                        rollingInfoRight: widget.rollingInfoRight,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -192,8 +221,6 @@ class _RollingSwitchState extends State<RollingSwitch>
   void open() => animationController.forward();
 
   void initAllAnimation() {
-    animation = CurvedAnimation(parent: animationController, curve: Curves.easeInOut);
-
     animationOpacityLeft = Tween(begin: 1.0, end: 0.0).animate(
       CurvedAnimation(
         parent: animationController,

@@ -59,6 +59,15 @@ class _MyHomePageState extends State<MyHomePage> {
               onChanged: (bool state) {
                 print('turned ${(state) ? 'on' : 'off'}');
               },
+              rollingInfoRight: const RollingIconInfo(
+                icon: Icons.flag,
+                text: Text('Flag'),
+              ),
+              rollingInfoLeft: const RollingIconInfo(
+                icon: Icons.check,
+                backgroundColor: Colors.grey,
+                text: Text('Check'),
+              ),
             ),
           ],
         ),

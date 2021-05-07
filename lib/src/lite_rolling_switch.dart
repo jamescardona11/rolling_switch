@@ -65,7 +65,7 @@ class _RollingSwitchState extends State<LiteRollingSwitch>
   double value = 0.0;
 
   late AnimationController animationController;
-  late Animation<double> animation;
+  // late Animation<double> animation;
   late Animation<double> animationOpacityOff;
   late Animation<double> animationOpacityOn;
   late Animation<Color?> animationColor; //todo
@@ -119,7 +119,8 @@ class _RollingSwitchState extends State<LiteRollingSwitch>
             child: Stack(
               children: <Widget>[
                 Transform.translate(
-                  offset: Offset(_margin.toInt() * animation.value, 0), //original
+                  offset:
+                      Offset(_margin.toInt() * animationController.value, 0), //original
                   child: FadeTransition(
                     opacity: animationOpacityOff,
                     child: _TextRight(
@@ -129,25 +130,25 @@ class _RollingSwitchState extends State<LiteRollingSwitch>
                     ),
                   ),
                 ),
-                AnimatedBuilder(
-                  animation: animationController,
-                  builder: (_, child) => Transform.translate(
-                    offset: Offset(_margin.toInt() * (1 - animation.value), 0), //original
+                Padding(
+                  padding: EdgeInsets.only(right: widget.innerSize),
+                  child: Transform.translate(
+                    offset: Offset(
+                        _margin.toInt() * (1 - animationController.value), 0), //original
                     child: FadeTransition(
                       opacity: animationOpacityOn,
-                      child: child,
+                      child: _TextLeft(
+                        size: widget.innerSize,
+                        margin: _margin,
+                        text: widget.textOn,
+                      ),
                     ),
-                  ),
-                  child: _TextLeft(
-                    size: widget.innerSize,
-                    margin: _margin,
-                    text: widget.textOn,
                   ),
                 ),
                 AnimatedBuilder(
                   animation: animationController,
                   builder: (_, child) => Transform.translate(
-                    offset: Offset(maxWidthRotation * animation.value, 0),
+                    offset: Offset(maxWidthRotation * animationController.value, 0),
                     child: child,
                   ),
                   child: Transform.rotate(
@@ -191,7 +192,7 @@ class _RollingSwitchState extends State<LiteRollingSwitch>
   }
 
   void initAllAnimation() {
-    animation = CurvedAnimation(parent: animationController, curve: Curves.easeInOut);
+    // animation = CurvedAnimation(parent: animationController, curve: Curves.easeInOut);
 
     animationOpacityOff = Tween(begin: 1.0, end: 0.0).animate(
       CurvedAnimation(
