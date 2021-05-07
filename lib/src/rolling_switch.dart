@@ -2,14 +2,19 @@ import 'package:flutter/material.dart';
 
 import 'info/rolling_info.dart';
 import 'widget/circular_container.dart';
-import 'widget/rolling_icon_widget.dart';
+import 'widget/transform_rolling_info.dart';
 
 class RollingSwitch extends StatefulWidget {
   const RollingSwitch.icon({
     Key? key,
     required this.onChanged,
-    RollingIconInfo rollingInfoOn = const RollingIconInfo(),
-    RollingIconInfo rollingInfoOff = const RollingIconInfo(),
+    RollingIconInfo rollingInfoRight = const RollingIconInfo(
+      icon: Icons.flag,
+    ),
+    RollingIconInfo rollingInfoLeft = const RollingIconInfo(
+      icon: Icons.check,
+      backgroundColor: Colors.grey,
+    ),
     this.initialState = false,
     this.width = 130,
     this.height = 50,
@@ -19,15 +24,17 @@ class RollingSwitch extends StatefulWidget {
     this.onTap,
     this.onSwipe,
   })  : assert(height >= 50.0 && innerSize >= 40.0),
-        rollingInfoOn = rollingInfoOn,
-        rollingInfoOff = rollingInfoOff,
+        rollingInfoLeft = rollingInfoLeft,
+        rollingInfoRight = rollingInfoRight,
         super(key: key);
 
   const RollingSwitch.widget({
     Key? key,
     required this.onChanged,
-    RollingWidgetInfo rollingInfoOn = const RollingWidgetInfo(),
-    RollingWidgetInfo rollingInfoOff = const RollingWidgetInfo(),
+    RollingIconInfo rollingInfoRight = const RollingIconInfo(),
+    RollingIconInfo rollingInfoLeft = const RollingIconInfo(
+      backgroundColor: Colors.grey,
+    ),
     this.initialState = false,
     this.width = 130,
     this.height = 50,
@@ -37,13 +44,13 @@ class RollingSwitch extends StatefulWidget {
     this.onTap,
     this.onSwipe,
   })  : assert(height >= 50.0 && innerSize >= 40.0),
-        rollingInfoOn = rollingInfoOn,
-        rollingInfoOff = rollingInfoOff,
+        rollingInfoLeft = rollingInfoLeft,
+        rollingInfoRight = rollingInfoRight,
         super(key: key);
 
   final Function(bool) onChanged;
-  final RollingInfo rollingInfoOn;
-  final RollingInfo rollingInfoOff;
+  final RollingInfo rollingInfoLeft;
+  final RollingInfo rollingInfoRight;
   final bool initialState;
   final double width;
   final double height;
@@ -61,8 +68,8 @@ class _RollingSwitchState extends State<RollingSwitch>
     with SingleTickerProviderStateMixin {
   late AnimationController animationController;
   late Animation<double> animation;
-  late Animation<double> animationOpacityOff;
-  late Animation<double> animationOpacityOn;
+  late Animation<double> animationOpacityLeft;
+  late Animation<double> animationOpacityRight;
   late Animation<Color?> animationColor;
 
   final double margin = 10.0;
@@ -80,7 +87,7 @@ class _RollingSwitchState extends State<RollingSwitch>
     super.initState();
 
     maxSlide = widget.width - widget.innerSize - margin;
-    minDragStartEdge = widget.width * 0.2;
+    minDragStartEdge = 40;
     maxDragStartEdge = maxSlide - 16;
 
     animationController = AnimationController(
@@ -98,37 +105,43 @@ class _RollingSwitchState extends State<RollingSwitch>
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(5),
-      width: widget.width,
-      height: widget.height,
-      decoration: BoxDecoration(
-        color: animationColor.value,
-        borderRadius: BorderRadius.circular(50),
-      ),
-      child: GestureDetector(
-        onHorizontalDragStart: onDragStart,
-        onHorizontalDragUpdate: onDragUpdate,
-        onHorizontalDragEnd: onDragEnd,
-        child: AnimatedBuilder(
-          animation: animationController,
-          builder: (_, child) {
-            final double animValue = animationController.value;
-            final slideAmount = maxSlide * animValue;
-            return Transform.translate(
-              offset: Offset(slideAmount, 0),
-              // transform: Matrix4.identity()..translate(slideAmount),
-              // alignment: Alignment.centerLeft,
-              child: child,
-            );
-          },
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: CircularContainer(
-              size: widget.innerSize,
-              child: Icon(
-                Icons.check,
-                size: widget.innerSize / 2,
+    return AnimatedBuilder(
+      animation: animationController,
+      builder: (context, child) => Container(
+        padding: const EdgeInsets.all(5),
+        width: widget.width,
+        height: widget.height,
+        decoration: BoxDecoration(
+          color: animationColor.value,
+          borderRadius: BorderRadius.circular(50),
+        ),
+        child: GestureDetector(
+          onHorizontalDragStart: onDragStart,
+          onHorizontalDragUpdate: onDragUpdate,
+          onHorizontalDragEnd: onDragEnd,
+          child: AnimatedBuilder(
+            animation: animationController,
+            builder: (_, child) {
+              final double animValue = animationController.value;
+              final slideAmount = maxSlide * animValue;
+              return Transform.translate(
+                offset: Offset(slideAmount, 0),
+                // transform: Matrix4.identity()..translate(slideAmount),
+                // alignment: Alignment.centerLeft,
+                child: child,
+              );
+            },
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: CircularContainer(
+                size: widget.innerSize,
+                child: TransforRollingWidget(
+                  animationOpacityLeft: animationOpacityLeft,
+                  animationOpacityRight: animationOpacityRight,
+                  innerSize: widget.innerSize,
+                  rollingInfoLeft: widget.rollingInfoLeft,
+                  rollingInfoRight: widget.rollingInfoRight,
+                ),
               ),
             ),
           ),
@@ -148,14 +161,13 @@ class _RollingSwitchState extends State<RollingSwitch>
 
   void onDragUpdate(DragUpdateDetails details) {
     if (canBeDragged) {
-      print('CAN');
       final double delta = (details.primaryDelta ?? 0) / maxSlide;
       animationController.value += delta;
     }
   }
 
   void onDragEnd(DragEndDetails details) {
-    if (animationController.isCompleted || animationController.isCompleted) {
+    if (animationController.isCompleted || animationController.isDismissed) {
       return;
     }
     if (details.velocity.pixelsPerSecond.dx.abs() >= 365) {
@@ -163,9 +175,9 @@ class _RollingSwitchState extends State<RollingSwitch>
           details.velocity.pixelsPerSecond.dx / MediaQuery.of(context).size.width;
       animationController.fling(velocity: visualVelocity);
     } else if (animationController.value < 0.5) {
-      action();
+      close();
     } else {
-      action();
+      open();
     }
   }
 
@@ -175,17 +187,21 @@ class _RollingSwitchState extends State<RollingSwitch>
     widget.onChanged(turnState);
   }
 
+  void close() => animationController.reverse();
+
+  void open() => animationController.forward();
+
   void initAllAnimation() {
     animation = CurvedAnimation(parent: animationController, curve: Curves.easeInOut);
 
-    animationOpacityOff = Tween(begin: 1.0, end: 0.0).animate(
+    animationOpacityLeft = Tween(begin: 1.0, end: 0.0).animate(
       CurvedAnimation(
         parent: animationController,
         curve: const Interval(0.0, 0.5, curve: Curves.easeInOut),
       ),
     );
 
-    animationOpacityOn = Tween(begin: 0.0, end: 1.0).animate(
+    animationOpacityRight = Tween(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: animationController,
         curve: const Interval(0.45, 1.0, curve: Curves.easeInOut),
@@ -193,8 +209,8 @@ class _RollingSwitchState extends State<RollingSwitch>
     );
 
     animationColor = ColorTween(
-            begin: widget.rollingInfoOff.backgroundColor,
-            end: widget.rollingInfoOn.backgroundColor)
+            begin: widget.rollingInfoLeft.backgroundColor,
+            end: widget.rollingInfoRight.backgroundColor)
         .animate(
       CurvedAnimation(
         parent: animationController,

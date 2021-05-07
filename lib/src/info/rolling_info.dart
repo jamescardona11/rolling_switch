@@ -13,12 +13,10 @@ class RollingIconInfo extends RollingInfo<IconData> {
     Text? text,
     Color backgroundColor = Colors.lightBlueAccent,
     IconData icon = Icons.check,
-    this.colorIconActive,
-    this.colorIconInactive,
+    this.iconColor,
   }) : super(text, backgroundColor, icon);
 
-  final Color? colorIconActive;
-  final Color? colorIconInactive;
+  final Color? iconColor;
 }
 
 class RollingWidgetInfo extends RollingInfo<Widget> {

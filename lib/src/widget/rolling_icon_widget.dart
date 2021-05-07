@@ -2,18 +2,16 @@ import 'package:flutter/material.dart';
 
 class IconWidget extends StatelessWidget {
   final IconData iconData;
-  final Color? iconColor;
   final double size;
   final Animation<double> animationOpacity;
-  final Color colorValue;
+  final Color color;
 
   const IconWidget({
     Key? key,
     required this.animationOpacity,
     required this.iconData,
     required this.size,
-    required this.colorValue,
-    this.iconColor,
+    required this.color,
   }) : super(key: key);
 
   @override
@@ -24,7 +22,7 @@ class IconWidget extends StatelessWidget {
         child: Icon(
           iconData,
           size: size,
-          color: (iconColor != null) ? iconColor : colorValue,
+          color: color,
         ),
       ),
     );
