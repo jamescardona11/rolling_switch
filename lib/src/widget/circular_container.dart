@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
 class CircularContainer extends StatelessWidget {
-  final double size;
-  final Widget child;
-  final Color color;
-
   const CircularContainer({
     Key? key,
     required this.size,
     required this.child,
     this.color = Colors.white,
   }) : super(key: key);
+
+  final double size;
+  final Widget child;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {

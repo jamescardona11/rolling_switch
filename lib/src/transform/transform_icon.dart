@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:rolling_switch/src/info/rolling_info.dart';
 import 'package:rolling_switch/src/widget/rolling_icon_widget.dart';
 
-class TransforIconWidget extends StatelessWidget {
-  const TransforIconWidget({
+class TransforRollingWidget extends StatelessWidget {
+  const TransforRollingWidget({
     Key? key,
     required this.rollingInfoRight,
     required this.rollingInfoLeft,
@@ -28,20 +28,33 @@ class TransforIconWidget extends StatelessWidget {
         children: [
           IconWidget(
             animationOpacity: animationOpacityLeft,
-            iconData: rl.icon,
+            icon: rl.icon,
             size: innerSize / 2,
             color: rl.iconColor ?? rl.backgroundColor,
           ),
           IconWidget(
             animationOpacity: animationOpacityRight,
-            iconData: rr.icon,
+            icon: rr.icon,
             size: innerSize / 2,
             color: rr.iconColor ?? rr.backgroundColor,
           ),
         ],
       );
-    } else {}
-
-    return Container();
+    } else {
+      final rl = rollingInfoLeft as RollingWidgetInfo;
+      final rr = rollingInfoRight as RollingWidgetInfo;
+      return Stack(
+        children: [
+          CustomIconWidget(
+            animationOpacity: animationOpacityLeft,
+            icon: rl.icon,
+          ),
+          CustomIconWidget(
+            animationOpacity: animationOpacityRight,
+            icon: rr.icon,
+          ),
+        ],
+      );
+    }
   }
 }

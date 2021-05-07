@@ -2,11 +2,10 @@ import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:rolling_switch/src/transform/transform_text.dart';
 
-import 'info/action_info.dart';
 import 'info/rolling_info.dart';
 import 'transform/transform_icon.dart';
-import 'transform/transform_text.dart';
 import 'utils/drag_utils.dart';
 import 'widget/circular_container.dart';
 
@@ -25,9 +24,10 @@ class RollingSwitch extends StatefulWidget {
     this.width = 130,
     this.height = 50,
     this.innerSize = 40,
-    this.showIconContainer = true,
+    this.circularColor = Colors.white,
+    this.enableDrag = false,
     this.animationDuration = const Duration(milliseconds: 600),
-    this.actionInfo = const ActionInfo(),
+    this.onTap,
   })  : assert(height >= 50.0 && innerSize >= 40.0),
         rollingInfoLeft = rollingInfoLeft,
         rollingInfoRight = rollingInfoRight,
@@ -36,17 +36,18 @@ class RollingSwitch extends StatefulWidget {
   const RollingSwitch.widget({
     Key? key,
     required this.onChanged,
-    RollingIconInfo rollingInfoRight = const RollingIconInfo(),
-    RollingIconInfo rollingInfoLeft = const RollingIconInfo(
+    RollingWidgetInfo rollingInfoRight = const RollingWidgetInfo(),
+    RollingWidgetInfo rollingInfoLeft = const RollingWidgetInfo(
       backgroundColor: Colors.grey,
     ),
     this.initialState = false,
     this.width = 130,
     this.height = 50,
     this.innerSize = 40,
-    this.showIconContainer = true,
+    this.circularColor = Colors.white,
+    this.enableDrag = false,
     this.animationDuration = const Duration(milliseconds: 600),
-    this.actionInfo = const ActionInfo(),
+    this.onTap,
   })  : assert(height >= 50.0 && innerSize >= 40.0),
         rollingInfoLeft = rollingInfoLeft,
         rollingInfoRight = rollingInfoRight,
@@ -59,9 +60,10 @@ class RollingSwitch extends StatefulWidget {
   final double width;
   final double height;
   final double innerSize;
-  final bool showIconContainer;
+  final Color circularColor;
+  final bool enableDrag;
   final Duration animationDuration;
-  final ActionInfo actionInfo;
+  final Function? onTap;
 
   @override
   _RollingSwitchState createState() => _RollingSwitchState();
@@ -81,8 +83,6 @@ class _RollingSwitchState extends State<RollingSwitch>
   late DragUtils dragUtils;
 
   bool turnState = true;
-  bool canBeDragged = false;
-  bool allWidget = false;
 
   @override
   void initState() {
@@ -94,11 +94,8 @@ class _RollingSwitchState extends State<RollingSwitch>
     initAllAnimation();
 
     dragUtils = DragUtils(
-      animationController: animationController,
-      maxSlide: widget.width - widget.innerSize - margin,
-    );
-
-    allWidget = widget.actionInfo.activeInAllWidget;
+        animationController: animationController,
+        maxSlide: widget.width - widget.innerSize - margin);
 
     turnState = widget.initialState;
     if (turnState) {
@@ -108,71 +105,74 @@ class _RollingSwitchState extends State<RollingSwitch>
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: animationController,
-      builder: (context, child) => Container(
-        padding: const EdgeInsets.all(5),
-        width: widget.width,
-        height: widget.height,
-        decoration: BoxDecoration(
-          color: animationColor.value,
-          borderRadius: BorderRadius.circular(50),
-        ),
-        child: Center(
-          child: Stack(
-            children: [
-              TransformRightTextWidget(
-                margin: margin,
-                animationValue: animationController.value,
-                animationOpacity: animationOpacityRight,
-                text: widget.rollingInfoRight.text,
-              ),
-              TransformLeftTextWidget(
-                margin: margin,
-                innerSize: widget.innerSize,
-                animationValue: animationController.value,
-                animationOpacity: animationOpacityLeft,
-                text: widget.rollingInfoLeft.text,
-              ),
-              GestureDetector(
-                onHorizontalDragStart: dragUtils.onDragStart,
-                onHorizontalDragUpdate: dragUtils.onDragUpdate,
-                onHorizontalDragEnd: dragUtils.onDragEnd,
-                child: AnimatedBuilder(
-                  animation: animationController,
-                  builder: (_, child) => Transform.translate(
-                    offset: Offset(dragUtils.maxSlide * animationController.value, 0),
-                    child: child,
-                  ),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Transform.rotate(
-                      angle: lerpDouble(0, 2 * math.pi, animationController.value)!,
-                      child: CircularContainer(
-                        size: widget.innerSize,
-                        child: TransforIconWidget(
-                          animationOpacityLeft: animationOpacityLeft,
-                          animationOpacityRight: animationOpacityRight,
-                          innerSize: widget.innerSize,
-                          rollingInfoLeft: widget.rollingInfoLeft,
-                          rollingInfoRight: widget.rollingInfoRight,
+    return InkWell(
+      onTap: widget.enableDrag
+          ? null
+          : () {
+              widget.onTap?.call();
+              action();
+            },
+      child: AnimatedBuilder(
+        animation: animationController,
+        builder: (context, child) => Container(
+          padding: const EdgeInsets.all(5),
+          width: widget.width,
+          height: widget.height,
+          decoration: BoxDecoration(
+            color: animationColor.value,
+            borderRadius: BorderRadius.circular(50),
+          ),
+          child: Center(
+            child: Stack(
+              children: [
+                TransformRightTextWidget(
+                  margin: margin,
+                  animationValue: animationController.value,
+                  animationOpacity: animationOpacityRight,
+                  text: widget.rollingInfoRight.text,
+                ),
+                TransformLeftTextWidget(
+                  margin: margin,
+                  innerSize: widget.innerSize,
+                  animationValue: animationController.value,
+                  animationOpacity: animationOpacityLeft,
+                  text: widget.rollingInfoLeft.text,
+                ),
+                GestureDetector(
+                  onHorizontalDragStart: dragUtils.onDragStart,
+                  onHorizontalDragUpdate: dragUtils.onDragUpdate,
+                  onHorizontalDragEnd: dragUtils.onDragEnd,
+                  child: AnimatedBuilder(
+                    animation: animationController,
+                    builder: (_, child) => Transform.translate(
+                      offset: Offset(dragUtils.maxSlide * animationController.value, 0),
+                      child: child,
+                    ),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Transform.rotate(
+                        angle: lerpDouble(0, 2 * math.pi, animationController.value)!,
+                        child: CircularContainer(
+                          size: widget.innerSize,
+                          color: widget.circularColor,
+                          child: TransforRollingWidget(
+                            animationOpacityLeft: animationOpacityLeft,
+                            animationOpacityRight: animationOpacityRight,
+                            innerSize: widget.innerSize,
+                            rollingInfoLeft: widget.rollingInfoLeft,
+                            rollingInfoRight: widget.rollingInfoRight,
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
     );
-  }
-
-  void action() {
-    turnState = !turnState;
-    turnState ? animationController.forward() : animationController.reverse();
-    widget.onChanged(turnState);
   }
 
   void initAllAnimation() {
@@ -199,5 +199,11 @@ class _RollingSwitchState extends State<RollingSwitch>
         curve: const Interval(0.0, 1.0, curve: Curves.easeInOut),
       ),
     );
+  }
+
+  void action() {
+    turnState = !turnState;
+    turnState ? animationController.forward() : animationController.reverse();
+    widget.onChanged(turnState);
   }
 }

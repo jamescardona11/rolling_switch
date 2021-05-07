@@ -22,7 +22,7 @@ class RollingIconInfo extends RollingInfo<IconData> {
 class RollingWidgetInfo extends RollingInfo<Widget> {
   const RollingWidgetInfo({
     Text? text,
-    Color backgroundColor = Colors.grey,
+    Color backgroundColor = Colors.lightBlueAccent,
     Widget icon = const SizedBox(),
   }) : super(text, backgroundColor, icon);
 }

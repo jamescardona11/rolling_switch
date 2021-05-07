@@ -69,6 +69,23 @@ class _MyHomePageState extends State<MyHomePage> {
                 text: Text('Check'),
               ),
             ),
+
+            RollingSwitch.widget(
+              onChanged: (bool state) {
+                print('turned ${(state) ? 'on' : 'off'}');
+              },
+              rollingInfoRight: RollingWidgetInfo(
+                icon: FlutterLogo(),
+                text: Text('Flutter'),
+              ),
+              rollingInfoLeft: RollingWidgetInfo(
+                icon: FlutterLogo(
+                  style: FlutterLogoStyle.stacked,
+                ),
+                backgroundColor: Colors.grey,
+                text: Text('Stacked'),
+              ),
+            ),
           ],
         ),
       ),
