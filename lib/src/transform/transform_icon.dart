@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:rolling_switch/src/info/rolling_info.dart';
+import 'package:rolling_switch/src/widget/rolling_icon_widget.dart';
 
-import 'rolling_icon_widget.dart';
-
-class TransforRollingWidget extends StatelessWidget {
-  const TransforRollingWidget({
+class TransforIconWidget extends StatelessWidget {
+  const TransforIconWidget({
     Key? key,
     required this.rollingInfoRight,
     required this.rollingInfoLeft,
