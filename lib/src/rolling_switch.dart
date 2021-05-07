@@ -108,49 +108,44 @@ class _RollingSwitchState extends State<RollingSwitch>
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        widget.actionInfo.onTap?.call();
-        if (allWidget) {
-          action();
-        }
-      },
-      child: AnimatedBuilder(
-        animation: animationController,
-        builder: (context, child) => Container(
-          padding: const EdgeInsets.all(5),
-          width: widget.width,
-          height: widget.height,
-          decoration: BoxDecoration(
-            color: animationColor.value,
-            borderRadius: BorderRadius.circular(50),
-          ),
-          child: Center(
-            child: Stack(
-              children: [
-                TransformRightTextWidget(
-                  margin: margin,
-                  animationValue: animationController.value,
-                  animationOpacity: animationOpacityRight,
-                  text: widget.rollingInfoRight.text,
-                ),
-                TransformLeftTextWidget(
-                  margin: margin,
-                  innerSize: widget.innerSize,
-                  animationValue: animationController.value,
-                  animationOpacity: animationOpacityLeft,
-                  text: widget.rollingInfoLeft.text,
-                ),
-                GestureDetector(
-                  onHorizontalDragStart: dragUtils.onDragStart,
-                  onHorizontalDragUpdate: dragUtils.onDragUpdate,
-                  onHorizontalDragEnd: dragUtils.onDragEnd,
-                  child: AnimatedBuilder(
-                    animation: animationController,
-                    builder: (_, child) => Transform.translate(
-                      offset: Offset(dragUtils.maxSlide * animationController.value, 0),
-                      child: child,
-                    ),
+    return AnimatedBuilder(
+      animation: animationController,
+      builder: (context, child) => Container(
+        padding: const EdgeInsets.all(5),
+        width: widget.width,
+        height: widget.height,
+        decoration: BoxDecoration(
+          color: animationColor.value,
+          borderRadius: BorderRadius.circular(50),
+        ),
+        child: Center(
+          child: Stack(
+            children: [
+              TransformRightTextWidget(
+                margin: margin,
+                animationValue: animationController.value,
+                animationOpacity: animationOpacityRight,
+                text: widget.rollingInfoRight.text,
+              ),
+              TransformLeftTextWidget(
+                margin: margin,
+                innerSize: widget.innerSize,
+                animationValue: animationController.value,
+                animationOpacity: animationOpacityLeft,
+                text: widget.rollingInfoLeft.text,
+              ),
+              GestureDetector(
+                onHorizontalDragStart: dragUtils.onDragStart,
+                onHorizontalDragUpdate: dragUtils.onDragUpdate,
+                onHorizontalDragEnd: dragUtils.onDragEnd,
+                child: AnimatedBuilder(
+                  animation: animationController,
+                  builder: (_, child) => Transform.translate(
+                    offset: Offset(dragUtils.maxSlide * animationController.value, 0),
+                    child: child,
+                  ),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
                     child: Transform.rotate(
                       angle: lerpDouble(0, 2 * math.pi, animationController.value)!,
                       child: CircularContainer(
@@ -166,8 +161,8 @@ class _RollingSwitchState extends State<RollingSwitch>
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
