@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 
+/// {@template text_indicator}
+///
+/// Widget to show the text indicator in the switch
+///
+/// {@endtemplate}
+
 class TextIndicatorWidget extends StatelessWidget {
   TextIndicatorWidget.left({
     Key? key,

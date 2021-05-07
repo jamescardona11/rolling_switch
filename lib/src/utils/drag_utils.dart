@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 
+/// {@template drag_utils}
+///
+/// Helper to handle the drag in the [CircularContainer]
+///
+/// {@endtemplate}
 class DragUtils {
   DragUtils({
     required this.animationController,

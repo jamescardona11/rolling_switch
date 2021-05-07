@@ -9,6 +9,37 @@ import 'transform/transform_icon.dart';
 import 'utils/drag_utils.dart';
 import 'widget/circular_container.dart';
 
+/// {@template rolling_switch}
+///
+/// The main widget to show a rolling widget
+/// Customable and attractive Switch button.
+///
+/// ```dart
+/// RollingSwitch.icon(
+///   onChanged: (bool state) {
+///     print('turned ${(state) ? 'on' : 'off'}');
+///   },
+///   rollingInfoRight: const RollingIconInfo(
+///     icon: Icons.flag,
+///     text: Text('Flag'),
+///   ),
+///   rollingInfoLeft: const RollingIconInfo(
+///     icon: Icons.check,
+///     backgroundColor: Colors.grey,
+///     text: Text('Check'),
+///   ),
+/// )
+/// ```
+///
+/// The only required value is:
+/// * [onChanged] is called when the user toggles the switch left or right
+///
+/// Available constructors:
+/// * RollingSwitch.icon: Create a Rolling with flutter icons
+/// * RollingSwitch.widget: Create a Rolling with custom widget
+///
+/// {@endtemplate}
+
 class RollingSwitch extends StatefulWidget {
   const RollingSwitch.icon({
     Key? key,
@@ -53,16 +84,37 @@ class RollingSwitch extends StatefulWidget {
         rollingInfoRight = rollingInfoRight,
         super(key: key);
 
+  /// [onChanged] is called when the user toggles the switch left or right
   final Function(bool) onChanged;
+
+  /// [rollingInfoLeft] configure the infor for the when icon is in left
   final RollingInfo rollingInfoLeft;
+
+  /// [rollingInfoRight] configure the infor for the when icon is in right
   final RollingInfo rollingInfoRight;
+
+  /// [initialState] determines whether this switch is left or right
   final bool initialState;
+
+  /// [width] width size
   final double width;
+
+  /// [height] height size
   final double height;
+
+  /// [innerSize] helper to change size of icon and elements into the rolling switch
   final double innerSize;
+
+  /// [circularColor] color for the circular icon wrapper
   final Color circularColor;
+
+  /// [enableDrag] enable the drag event, for the moment only can use drag or tap
   final bool enableDrag;
+
+  /// [animationDuration] animation duration
   final Duration animationDuration;
+
+  /// [onTap] function callback when tap is called
   final Function? onTap;
 
   @override

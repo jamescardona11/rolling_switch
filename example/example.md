@@ -17,7 +17,7 @@ RollingSwitch.icon(
     backgroundColor: Colors.grey,
     text: Text('Check'),
   ),
-),
+)
 ```
 
 ### Create a RollingSwitch Widget with custom Widget.

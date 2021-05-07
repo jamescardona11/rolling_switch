@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:rolling_switch/src/widget/text_indicator.dart';
 
+/// {@template transform_text}
+///
+/// This class transform the rollingInfo in a right_text
+///
+/// {@endtemplate}
 class TransformRightTextWidget extends StatelessWidget {
   const TransformRightTextWidget({
     Key? key,
@@ -30,6 +35,11 @@ class TransformRightTextWidget extends StatelessWidget {
   }
 }
 
+/// {@template transform_text}
+///
+/// This class transform the rollingInfo in a left_text
+///
+/// {@endtemplate}
 class TransformLeftTextWidget extends StatelessWidget {
   const TransformLeftTextWidget({
     Key? key,

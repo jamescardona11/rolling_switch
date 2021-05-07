@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:rolling_switch/src/info/rolling_info.dart';
 import 'package:rolling_switch/src/widget/rolling_icon_widget.dart';
 
+/// {@template transform_icon}
+///
+/// This class transform the rollingInfo in a stack with [IconWidget] or [CustomIconWidget]
+///
+/// {@endtemplate}
 class TransforRollingWidget extends StatelessWidget {
   const TransforRollingWidget({
     Key? key,

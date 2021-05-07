@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 
+/// {@template drag_utils}
+///
+/// Simple class to decorate the `icon` with a circular widget
+///
+/// {@endtemplate}
 class CircularContainer extends StatelessWidget {
   const CircularContainer({
     Key? key,

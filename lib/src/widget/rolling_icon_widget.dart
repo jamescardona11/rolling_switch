@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 
+/// {@template icon_widget}
+///
+/// Widget to draw a Icon
+///
+/// {@endtemplate}
 class IconWidget extends StatelessWidget {
   final IconData icon;
   final double size;
@@ -29,6 +34,11 @@ class IconWidget extends StatelessWidget {
   }
 }
 
+/// {@template custom_icon_widget}
+///
+/// Widget to draw a custom widget
+///
+/// {@endtemplate}
 class CustomIconWidget extends StatelessWidget {
   final Widget icon;
 
