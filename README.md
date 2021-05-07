@@ -1,10 +1,10 @@
 <p align="center">
-<!-- <img src="https://raw.githubusercontent.com/jamescardona11/argo/3c265cd83ffd14c3d11c30dbfa484df96c7a0ed3/img/argo_logo.svg" height="250" alt="Rolling Switch Package" /> -->
+<img src="https://github.com/jamescardona11/rolling_switch/blob/main/img/logo.png?raw=true" height="250" alt="Rolling Switch Package" />
 </p>
 
 ---
 
-Full customable rolling switch widget for flutter apps forked from this [library](https://github.com/cgustav/lite_rolling_switch)
+Full customizable rolling switch widget for flutter apps forked from this [library](https://github.com/cgustav/lite_rolling_switch)
 Custom Switch button with attractive animation,
 made to allow you to customize colors, icons, custom widget and other cosmetic content. 
 
@@ -98,6 +98,4 @@ RollingSwitch.icon(
 
 ## Previews
 
-![](https://media.giphy.com/media/hTx1jlMxasyVejHa6U/giphy.gif)
-
-![](https://media.giphy.com/media/TKSIVzM5RUDxnjucTf/giphy.gif)
+![](https://github.com/jamescardona11/rolling_switch/blob/main/img/example.gif?raw=true)
