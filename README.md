@@ -5,6 +5,7 @@
 ---
 
 Full customizable rolling switch widget for flutter apps forked from this [library](https://github.com/cgustav/lite_rolling_switch)
+</br>
 Custom Switch button with attractive animation,
 made to allow you to customize colors, icons, custom widget and other cosmetic content. 
 
