@@ -258,4 +258,10 @@ class _RollingSwitchState extends State<RollingSwitch>
     turnState ? animationController.forward() : animationController.reverse();
     widget.onChanged(turnState);
   }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
+  }
 }
