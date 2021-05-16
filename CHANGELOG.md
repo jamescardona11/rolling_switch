@@ -1,6 +1,7 @@
 ## [0.0.2] - Initial Release
 
 * Dispose animationController.
+* Format some classes with 'dartfmt -w .'
 
 
 ## [0.0.1] - Initial Release
