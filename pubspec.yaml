@@ -1,7 +1,7 @@
 name: rolling_switch
 description: Custom Switch button with attractive animation, made to allow you to customize colors, icons and other cosmetic content.
 
-version: 0.0.1
+version: 0.0.2
 homepage: https://github.com/jamescardona11/rolling_switch
 
 environment:

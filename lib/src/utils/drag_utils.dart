@@ -19,10 +19,10 @@ class DragUtils {
   bool canBeDragged = false;
 
   void onDragStart(DragStartDetails details) {
-    final bool isDragOpenFromLeft =
-        animationController.isDismissed && details.localPosition.dx < minDragStartEdge;
-    final bool isDragCloseFromRight =
-        animationController.isCompleted && details.localPosition.dx > maxDragStartEdge;
+    final bool isDragOpenFromLeft = animationController.isDismissed &&
+        details.localPosition.dx < minDragStartEdge;
+    final bool isDragCloseFromRight = animationController.isCompleted &&
+        details.localPosition.dx > maxDragStartEdge;
 
     canBeDragged = isDragCloseFromRight || isDragOpenFromLeft;
   }
@@ -39,7 +39,8 @@ class DragUtils {
       return;
     }
     if (details.velocity.pixelsPerSecond.dx.abs() >= 365) {
-      final double visualVelocity = details.velocity.pixelsPerSecond.dx / maxSlide;
+      final double visualVelocity =
+          details.velocity.pixelsPerSecond.dx / maxSlide;
       animationController.fling(velocity: visualVelocity);
     } else if (animationController.value < 0.5) {
       close();

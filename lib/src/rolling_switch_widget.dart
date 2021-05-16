@@ -197,13 +197,15 @@ class _RollingSwitchState extends State<RollingSwitch>
                   child: AnimatedBuilder(
                     animation: animationController,
                     builder: (_, child) => Transform.translate(
-                      offset: Offset(dragUtils.maxSlide * animationController.value, 0),
+                      offset: Offset(
+                          dragUtils.maxSlide * animationController.value, 0),
                       child: child,
                     ),
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Transform.rotate(
-                        angle: lerpDouble(0, 2 * math.pi, animationController.value)!,
+                        angle: lerpDouble(
+                            0, 2 * math.pi, animationController.value)!,
                         child: CircularContainer(
                           size: widget.innerSize,
                           color: widget.circularColor,
