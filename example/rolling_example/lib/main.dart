@@ -41,6 +41,7 @@ class MyHomePage extends StatelessWidget {
                 backgroundColor: Colors.grey,
                 text: Text('Check'),
               ),
+              // enableDrag: true,
             ),
             const SizedBox(height: 50),
             Text('Custom widget Constructor:'),

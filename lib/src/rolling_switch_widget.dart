@@ -157,7 +157,7 @@ class _RollingSwitchState extends State<RollingSwitch>
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return GestureDetector(
       onTap: widget.enableDrag
           ? null
           : () {
