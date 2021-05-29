@@ -1,4 +1,10 @@
-## [0.0.2] - Initial Release
+## [0.0.3] - Controller Create
+
+* Create a custom controller
+* Update Logo
+
+
+## [0.0.2] - Fix Some issue
 
 * Dispose animationController.
 * Format some classes with 'dartfmt -w .'

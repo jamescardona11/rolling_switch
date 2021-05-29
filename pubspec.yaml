@@ -1,7 +1,7 @@
 name: rolling_switch
 description: Custom Switch button with attractive animation, made to allow you to customize colors, icons and other cosmetic content.
 
-version: 0.0.2
+version: 0.0.3
 homepage: https://github.com/jamescardona11/rolling_switch
 
 environment:
@@ -10,6 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  tools_tkmonkey: ^0.0.1
 
 dev_dependencies:
   flutter_test:

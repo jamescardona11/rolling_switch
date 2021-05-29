@@ -3,7 +3,9 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:rolling_switch/src/transform/transform_text.dart';
+import 'package:tools_tkmonkey/tools_tkmonkey_flutter.dart';
 
+import 'controller/rolling_controller.dart';
 import 'info/rolling_info.dart';
 import 'transform/transform_icon.dart';
 import 'utils/drag_utils.dart';
@@ -59,6 +61,7 @@ class RollingSwitch extends StatefulWidget {
     this.enableDrag = false,
     this.animationDuration = const Duration(milliseconds: 400),
     this.onTap,
+    this.controller,
   })  : assert(height >= 50.0 && innerSize >= 40.0),
         rollingInfoLeft = rollingInfoLeft,
         rollingInfoRight = rollingInfoRight,
@@ -79,6 +82,7 @@ class RollingSwitch extends StatefulWidget {
     this.enableDrag = false,
     this.animationDuration = const Duration(milliseconds: 400),
     this.onTap,
+    this.controller,
   })  : assert(height >= 50.0 && innerSize >= 40.0),
         rollingInfoLeft = rollingInfoLeft,
         rollingInfoRight = rollingInfoRight,
@@ -117,14 +121,15 @@ class RollingSwitch extends StatefulWidget {
   /// [onTap] function callback when tap is called
   final Function? onTap;
 
+  /// `controller` to handle the behavior or rolling
+  final RollingController? controller;
+
   @override
   _RollingSwitchState createState() => _RollingSwitchState();
 }
 
 class _RollingSwitchState extends State<RollingSwitch>
-    with SingleTickerProviderStateMixin {
-  late AnimationController animationController;
-
+    with SingleTickerProviderStateMixin, TKMControllerMixin {
   late Animation<double> animationOpacityLeft;
   late Animation<double> animationOpacityRight;
   late Animation<Color?> animationColor;
@@ -153,6 +158,8 @@ class _RollingSwitchState extends State<RollingSwitch>
     if (turnState) {
       animationController.value = 1;
     }
+
+    widget.controller?.addState = this;
   }
 
   @override

@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatelessWidget {
+  final controller = RollingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,7 +42,6 @@ class MyHomePage extends StatelessWidget {
                 backgroundColor: Colors.grey,
                 text: Text('Check'),
               ),
-              // enableDrag: true,
             ),
             const SizedBox(height: 50),
             Text('Custom widget Constructor:'),
@@ -61,7 +61,12 @@ class MyHomePage extends StatelessWidget {
                 backgroundColor: Colors.grey,
                 text: Text('Stacked'),
               ),
+              controller: controller,
             ),
+            const SizedBox(height: 10),
+            TextButton(
+                onPressed: () => controller.start(),
+                child: Text('Rolling from controller'))
           ],
         ),
       ),

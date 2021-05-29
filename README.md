@@ -11,7 +11,7 @@ made to allow you to customize colors, icons, custom widget and other cosmetic c
 
 Manage the widget states in the same way you do with the classical material's switch widget.
 
-[![style: lint](https://img.shields.io/badge/style-lint-4BC0F5.svg)](https://pub.dev/packages/lint)
+[![style: lint](https://img.shields.io/badge/style-lint-4BC0F5.svg)](https://pub.dev/packages/lint)   [![](https://img.shields.io/github/license/jamescardona11/rolling_switch)](https://github.com/jamescardona11/rolling_switch/blob/main/LICENSE) [![](https://img.shields.io/pub/v/rolling_switch)](https://pub.dev/packages/rolling_switch)
 
 ---
 ## Quick Start
